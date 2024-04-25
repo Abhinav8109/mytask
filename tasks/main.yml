@@ -1,0 +1,23 @@
+---
+- name: Install Apache packages
+  apt:
+    name: apache2
+    state: present
+
+- name: Manage Apache configuration
+  template:
+    src: my_apache.conf.j2
+    dest: /etc/apache2/apache2.conf
+  notify: restart apache
+
+- name: Set up virtual host
+  template:
+    src: my_virtual_host.conf.j2
+    dest: /etc/apache2/sites-available/my_virtual_host.conf
+  notify: restart apache
+
+- name: Enable Apache rewrite module
+  apache2_module:
+    name: rewrite
+    state: present
+
